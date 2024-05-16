@@ -19,3 +19,15 @@ Denoising methodologies can be classified into two categories based on the natur
 
 ![image](https://github.com/tljxyys/LoTA-N2N/blob/main/fig/Result2.png)
 
+## Bibtex
+```
+@misc{hu2024lowtrace,
+      title={Low-Trace Adaptation of Zero-shot Self-supervised Blind Image Denoising}, 
+      author={Jintong Hu and Bin Xia and Bingchen Li and Wenming Yang},
+      year={2024},
+      eprint={2403.12382},
+      archivePrefix={arXiv},
+      primaryClass={eess.IV}
+}
+```
+
