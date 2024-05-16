@@ -30,28 +30,13 @@ where $\Vert \cdot \Vert^{2}_{2}$ denotes the Frobenius norm (element-wise 2-nor
 
 **Lemma 2.** For any two matrices $\mathbf{A}$, $\mathbf{B}\in\mathbb{R}^{n \times n}$, we have:
 
-$$ \Vert\mathbf{A}\pm\mathbf{B}\Vert{^2_2} = \Vert\mathbf{A}\Vert{^2_2} + \Vert\mathbf{B}\Vert{^2_2}\pm 2Tr (\mathbf{A}^\text{T}\mathbf{B}) $$
+$$ \Vert\mathbf{A}\pm\mathbf{B}\Vert{^2_2} = \Vert\mathbf{A}\Vert{^2_2} + \Vert\mathbf{B}\Vert{^2_2}\pm 2Tr (\mathbf{A}^\text{T}\mathbf{B}) \tag{3}$$
 
+Using Lemma 2, we can restructure the loss of self-supervised approach as the loss in supervised learning plus or minus a trace term and a constant. The disparity between the results of self-supervised and supervised learning arises primarily from the behavior of this trace term. A logical approach might involve setting this trace term to zero, thereby bridging the gap between the performance of self-supervised and supervised learning, leading to considerable improvements in performance. In light of this, we review several prominent self-supervised denoising models.
 
-\noindent$\textbf{Proof.}$ Without loss of generality, we only  show the proof for the case of subtraction as follows:
-\begin{equation}
-\begin{aligned}
-    &\quad\ \ \Vert\mathbf{A}-\mathbf{B}\Vert^{2}_{2}\\&=\Tr(\mathbf{A}-\mathbf{B})^\text{T}(\mathbf{A}-\mathbf{B})\\
-    &=\Tr(\mathbf{A}^\text{T}\mathbf{A}-\mathbf{A}^\text{T}\mathbf{B}-\mathbf{B}^\text{T}\mathbf{A}+\mathbf{B}^\text{T}\mathbf{B})\\
-    &=\Tr(\mathbf{A}^\text{T}\mathbf{A})-\Tr(\mathbf{A}^\text{T}\mathbf{B})-\Tr(\mathbf{B}^\text{T}\mathbf{A})+\Tr(\mathbf{B}^\text{T}\mathbf{B})\\&=\Tr(\mathbf{A}^\text{T}\mathbf{A})-\Tr(\mathbf{A}^\text{T}\mathbf{B})-\Tr(\mathbf{A}^\text{T}\mathbf{B})+\Tr(\mathbf{B}^\text{T}\mathbf{B})\\&=\Vert\mathbf{A}\Vert^{2}_{2}-2\Tr(\mathbf{A}^\text{T}\mathbf{B})+\Vert\mathbf{B}\Vert^{2}_{2}.
-\end{aligned}
-\end{equation}
+**Revisit Noise2Noise:** Noise2Noise was a pioneering approach among self-supervised denoising methods. Instead of using noisy/clean image pairs, Noise2Noise leveraged noisy/noisy image pairs with mutually independent noise. Specifically, the pairs of noisy images in Noise2Noise can be described as follows:
+$$y&=x+n,\quad\ n \sim \mathcal{N}\left(\textbf{0}, \sigma{^2_1}\textbf{\textit{I}}\right), y'&=x+n',\quad n \sim \mathcal{N}\left(\textbf{0}, \sigma{^2_2}\textbf{\textit{I}}\right)$$
 
-Using Lemma 2, we can restructure the loss of self-supervised approach as the loss in supervised learning plus or minus a trace term and a constant. The disparity between the results of self-supervised and supervised learning arises primarily from the behavior of this trace term. A logical approach might involve setting this trace term to zero, thereby bridging the gap between the performance of self-supervised and supervised learning, leading to considerable improvements in performance. In light of this, we review several prominent self-supervised denoising models: \\
-
-\noindent
-\textbf{Revisit Noise2Noise:} Noise2Noise \cite{lehtinen2018noise2noise} was a pioneering approach among self-supervised denoising methods. Instead of using noisy/clean image pairs, Noise2Noise leveraged noisy/noisy image pairs with mutually independent noise. Specifically, the pairs of noisy images in Noise2Noise can be described as follows:
-\begin{equation}
-\begin{aligned}
-    y&=x+n,\quad\ n \sim \mathcal{N}\left(\textbf{0}, \sigma^{2}_{1}\textbf{\textit{I}}\right),\\
-    y'&=x+n',\quad n \sim \mathcal{N}\left(\textbf{0}, \sigma^{2}_{2}\textbf{\textit{I}}\right),
-\end{aligned}
-\end{equation}
 where $y$ and $y'$ constitute two independent noisy representations of a clean image $x$. Utilizing Lemma 2, the optimization objective of Noise2Noise can be reformulated:
 \begin{equation}
 \begin{aligned}
