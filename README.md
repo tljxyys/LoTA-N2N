@@ -40,7 +40,7 @@ $$y=x+n,\quad n \sim \mathcal{N}\left(\textbf{0}, \sigma{^2_1}\textbf{\textit{I}
 where $y$ and $y'$ constitute two independent noisy representations of a clean image $x$. Utilizing Lemma 2, the optimization objective of Noise2Noise can be reformulated:
 $$
 \begin{split}
-    \mathcal{L}{_Noise2Noise}(\theta) &= \mathbb{E}_ {n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{y'}\Vert{^2_2}\}=\mathbb{E}_ {n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}-\mathbf{n'}\Vert{^2_2}\}\\
+    \mathcal{L}{^_Noise2Noise}(\theta) &= \mathbb{E}{^_{n, n'}}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{y'}\Vert{^2_2}\}=\mathbb{E}^_{n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}-\mathbf{n'}\Vert{^2_2}\}\\
     
 \end{split}
 $$
