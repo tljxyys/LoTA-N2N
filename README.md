@@ -39,14 +39,13 @@ $$y=x+n,\quad n \sim \mathcal{N}\left(\textbf{0}, \sigma{^2_1}\textbf{\textit{I}
 
 where $y$ and $y'$ constitute two independent noisy representations of a clean image $x$. Utilizing Lemma 2, the optimization objective of Noise2Noise can be reformulated:
 $$
-\begin{align}
-    \mathcal{L}_{Noise2Noise}(\theta)\\
-    =& \mathbb{E}_{n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{y'}\Vert^{2}_{2}\}=\mathbb{E}_{n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}-\mathbf{n'}\Vert^{2}_{2}\}\\
-    =& \mathbb{E}_{n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}\Vert^{2}_{2}-2\Tr\{(\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x})^\text{T}\mathbf{n'}\}+\Vert\mathbf{n'}\Vert^{2}_{2}\}\\
-    =& \mathbb{E}_{n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}\Vert^{2}_{2}\}-2\mathbb{E}_{n, n'}\{\Tr\{(\mathbf{f_{\theta}(\mathbf{y})})^\text{T}\mathbf{n'}\}\}+C\\
-    =& \mathbb{E}_{n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}\Vert^{2}_{2}\}-2\mathbb{E}_{n, n'}\{\Tr\{(\mathbf{n'})^\text{T}\mathbf{f_{\theta}(\mathbf{y})}\}\}+C\\
-    =& \mathbb{E}_{n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}\Vert^{2}_{2}\}-2\Tr\{\mathbb{E}_{n, n'}\{(\mathbf{n'})^\text{T}\mathbf{f_{\theta}(\mathbf{y})}\}\}+C.
-\end{align}
+\begin{split}
+    \mathcal{L}{_ Noise2Noise}(\theta) &= \mathbb{E}_ {n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{y'}\Vert{^2_2}\}=\mathbb{E}_ {n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}-\mathbf{n'}\Vert{^2_2}\}\\
+    &= \mathbb{E}_ {n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}\Vert{^2_2}-2\Tr\{(\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x})^\text{T}\mathbf{n'}\}+\Vert\mathbf{n'}\Vert^{2}_{2}\}\\
+    &= \mathbb{E}_ {n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}\Vert{^2_2}\}-2\mathbb{E}_ {n, n'}\{\Tr\{(\mathbf{f_{\theta}(\mathbf{y})})^\text{T}\mathbf{n'}\}\}+C\\
+    &= \mathbb{E}_ {n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}\Vert{^2_2}\}-2\mathbb{E}_ {n, n'}\{\Tr\{(\mathbf{n'})^\text{T}\mathbf{f_{\theta}(\mathbf{y})}\}\}+C\\
+    &= \mathbb{E}_ {n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}\Vert{^2_2}\}-2\Tr\{\mathbb{E}_ {n, n'}\{(\mathbf{n'})^\text{T}\mathbf{f_{\theta}(\mathbf{y})}\}\}+C.
+\end{split}
 $$
 Here, $C$ equals $\mathbb{E}_{n, n'}\{\Vert\mathbf{x}-\mathbf{y'}\Vert^{2}_{2}-2\Tr(\mathbf{x}^\text{T}(\mathbf{n'}))\}$,  which is a constant independent of $\theta$. The notation $f_{\theta}(\cdot)$ represents the denoising network characterized by learnable parameters $\theta$.
 
