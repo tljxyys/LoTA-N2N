@@ -30,7 +30,7 @@ where $\Vert \cdot \Vert^{2}_{2}$ denotes the Frobenius norm (element-wise 2-nor
 
 **Lemma 2.** For any two matrices $\mathbf{A}$, $\mathbf{B}\in\mathbb{R}^{n \times n}$, we have:
 
-$$ \Vert\mathbf{A}\pm\mathbf{B}\Vert^{2} = \Vert\mathbf{A}\Vert^{2}{2} + \Vert\mathbf{B}\Vert^{2}_{2}\pm 2Tr (\mathbf{A}^\text{T}\mathbf{B}) $$
+$$ \Vert\mathbf{A}\pm\mathbf{B}\Vert{^2_2} = \Vert\mathbf{A}\Vert{^2_2} + \Vert\mathbf{B}\Vert{^2_2}\pm 2Tr (\mathbf{A}^\text{T}\mathbf{B}) $$
 
 
 \noindent$\textbf{Proof.}$ Without loss of generality, we only  show the proof for the case of subtraction as follows:
