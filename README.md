@@ -1,5 +1,5 @@
-# Low-Trace Adaptation of Zero-shot Self-supervised Blind Image Denoising
-[![](https://img.shields.io/badge/Project-Page-green.svg)](https://github.com/tljxyys/LoTA-N2N) [![](https://img.shields.io/badge/Paper-ArXiv-red.svg)](https://arxiv.org/abs/2403.12382)
+# Low-Trace Adaptation of Zero-shot Self-supervised Blind Image Denoising🚀
+[![](https://img.shields.io/badge/Project-Page-green.svg)](https://github.com/tljxyys/LoTA-N2N) [![](https://img.shields.io/badge/Paper-ArXiv-red.svg)](https://arxiv.org/abs/2403.12382) [![](https://img.shields.io/badge/Dataset-🔰Kodak24-blue.svg)](https://www.kaggle.com/datasets/sherylmehta/kodak-dataset) [![](https://img.shields.io/badge/Dataset-🔰McMaster18-blue.svg)](https://www4.comp.polyu.edu.hk/~cslzhang/CDM_Dataset.htm) [![](https://img.shields.io/badge/Dataset-🔰FMD-blue.svg)](https://paperswithcode.com/dataset/fmd) [![](https://img.shields.io/badge/Dataset-🔰Xray-blue.svg)](https://www.kaggle.com/datasets/anirudhcv/labeled-optical-coherence-tomography-oct) 
 
 
 ***
@@ -7,3 +7,10 @@
 
 ![image](https://github.com/tljxyys/LoTA-N2N/blob/main/fig/Architecture.png)
 ***
+
+## 1. Background
+Denoising refers to the process of removing noise from data, typically within the context of image processing. Noise in an image can stem from various sources, such as suboptimal lighting conditions, sensor imperfections, or transmission inconsistencies. Within the realm of deep learning, denoising involves training neural networks to discern the inherent structure of the noisy data, enabling them to predict a clean, noise-free version of the input. Mathematically, denoising aims to approximate a function fθ(·), parameterized by θ, which maps a noisy input y to a corresonding clean output x:
+fθ(y) ≈ x. (1)
+Denoising methodologies can be classified into two categories based on the nature of training data: supervised and self-supervised (unsupervised). Supervised denoising requires pairs of clean and noisy data for training. The denoising function uses noisy inputs to produce denoised outputs, which are then compared to the clean data to minimize discrepancies. Such methods benefit from the direct learning signals provided by paired data, promoting a more precise understanding of the noise-to-signal mapping. In contrast, self-supervised denoising does not require labeled datasets. Instead, it aims to infer a clean data representation directly from the noisy inputs by optimizing an objective function. This function compels the network to learn the inherent structure of the data and filter out the noise. Self-supervised methods are based on the assumption that clean data reside within a lower-dimensional manifold of the noisy input space, which can be leveraged to dissociate the signal from the noise.
+
+![image](https://github.com/tljxyys/RDSTN_ultrasound/blob/main/fig/Figure%201.png)
