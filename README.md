@@ -18,110 +18,19 @@ Denoising methodologies can be classified into two categories based on the natur
 
 ## 2. Main Idea
 
-## 2.1. Revisit of other methods
+Figurea above illustrates the workflow of mainstream denoising algorithms in comparison to the process diagram of our proposed LoTA-N2N (Low-trace Adaptation Noise2Noise) model. Supervised denoising is trained using pairs of clean and noisy images. The Noise2Noise approach replaces these pairs with noisy/noisy image pairs, achieving denoising without the need for clean samples. Neighbor2Neighbor further reduces dataset requirements by generating noisy/noisy image pairs through downsampling a single noisy image. Our method, LoTA-N2N, takes a further step in the loss function by constraining the trace term. It guides the self-supervised model closer to the direction of supervised learning and yields superior performance without necessitating any prior assumptions about the noise characteristics.
 
-The effectiveness of our proposed LoTA-N2N model can be theoretically supported. The discrepancy between self-supervised learning and supervised learning is attributable to their distinct optimization objectives. In our proposed method, we suggest that the loss function in self-supervised learning can be decomposed into the supervised learning loss component and an additional term. By minimizing this additional term towards zero, we can potentially align the convergence of self-supervised learning with that of supervised learning, thus achieving significant performance gains in self-supervised denoising models. To demonstrate this decomposition, we introduce the following lemmas.
+In this work, we address the inherent shortcomings of conventional self-supervised denoising models that utilize the Noise2Noise (N2N) framework, which relies on mean squared error (MSE) loss for training. Since the noisy sub-images produced by the downsampling process do not conform to the assumption of equal mean intensities, directly applying the MSE loss leads to biased estimates in the trained models. To overcome this challenge, we propose a decomposition of the MSE loss, dividing it into terms suitable for a supervised learning framework, plus an additional trace component. This methodology is expected to improve the performance of denoising networks by providing an effective strategy for more precise noise reduction in practical applications.
 
-**Lemma 1.** Given a matrix $\mathbf{A}\in\mathbb{R}^{n \times n}$, the following identity holds:
-
-$$ \Vert\mathbf{A}\Vert^{2}_{2}=Tr(\mathbf{A}^\text{T}\mathbf{A}) \tag{2}$$
-
-where $\Vert \cdot \Vert^{2}_{2}$ denotes the Frobenius norm (element-wise 2-norm), summed across all squared elements of the matrix, and $Tr(\cdot)$ is the trace operation of a matrix.
-
-**Lemma 2.** For any two matrices $\mathbf{A}$, $\mathbf{B}\in\mathbb{R}^{n \times n}$, we have:
-
-$$ \Vert\mathbf{A}\pm\mathbf{B}\Vert{^2_2} = \Vert\mathbf{A}\Vert{^2_2} + \Vert\mathbf{B}\Vert{^2_2}\pm 2Tr (\mathbf{A}^\text{T}\mathbf{B}) \tag{3}$$
-
-Using Lemma 2, we can restructure the loss of self-supervised approach as the loss in supervised learning plus or minus a trace term and a constant. The disparity between the results of self-supervised and supervised learning arises primarily from the behavior of this trace term. A logical approach might involve setting this trace term to zero, thereby bridging the gap between the performance of self-supervised and supervised learning, leading to considerable improvements in performance. In light of this, we review several prominent self-supervised denoising models.
-
-**Revisit Noise2Noise:** Noise2Noise was a pioneering approach among self-supervised denoising methods. Instead of using noisy/clean image pairs, Noise2Noise leveraged noisy/noisy image pairs with mutually independent noise. Specifically, the pairs of noisy images in Noise2Noise can be described as follows:
-$$y=x+n,\quad n \sim \mathcal{N}\left(\textbf{0}, \sigma{^2_1}\textbf{\textit{I}}\right),\quad y'=x+n',\quad n \sim \mathcal{N}\left(\textbf{0}, \sigma{^2_2}\textbf{\textit{I}}\right) \tag{4}$$
-
-where $y$ and $y'$ constitute two independent noisy representations of a clean image $x$. Utilizing Lemma 2, the optimization objective of Noise2Noise can be reformulated:
-$$
-\begin{split}
-    \mathcal{L}{^_Noise2Noise}(\theta) &= \mathbb{E}{^_{n, n'}}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{y'}\Vert{^2_2}\}=\mathbb{E}^_{n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}-\mathbf{n'}\Vert{^2_2}\}\\
-    
-\end{split}
-$$
-Here, $C$ equals $\mathbb{E}_{n, n'}\{\Vert\mathbf{x}-\mathbf{y'}\Vert^{2}_{2}-2\Tr(\mathbf{x}^\text{T}(\mathbf{n'}))\}$,  which is a constant independent of $\theta$. The notation $f_{\theta}(\cdot)$ represents the denoising network characterized by learnable parameters $\theta$.
-
-Given the statistical independence and zero-mean nature of $n$ and $n'$, we can assert:
-\begin{equation}
-\begin{aligned}
-    &\quad \ \mathbb{E}_{n, n'}\{(\mathbf{n'})^\text{T}\mathbf{f_{\theta}(\mathbf{y})}\}\\
-    &=Cov_{n, n'}((\mathbf{n'})^\text{T},\ \mathbf{f_{\theta}(\mathbf{y})})
-    =Cov_{n, n'}(\boldsymbol{\sigma}\mathbf{n'}, \mathbf{M}\mathbf{y}+\mathbf{N})\\
-    &=Cov_{n, n'}(\boldsymbol{\sigma}\mathbf{n'}, \mathbf{M}\mathbf{n})=\boldsymbol{\sigma}Cov\left(\mathbf{n'},\mathbf{n}\right)\mathbf{M}^\text{T}=\textbf{0}.
-\end{aligned}    
-\end{equation}
-
-Accordingly, the optimization target of N2N \cite{lehtinen2018noise2noise} becomes analogous to that of supervised training, which explains why N2N achieves performance equalling or closely approaching its supervised counterparts. The proof also indicates that once $\mathbf{n}$ and $\mathbf{n}^{\prime}$ are confirmed to be mutually independent, the trace term nullifies, allowing self-supervised learning to mimic the properties of supervised learning. \\
-
-\noindent
-\textbf{Revisit Noisy As Clean:} The Noisy As Clean (NAC) \cite{Xu_2020} method posits that noise present in images is sufficiently subtle, facilitating training on a noisier/noise dataset. The method defines the noisier sample as $\mathbf{z}=\mathbf{x}+\mathbf{n}+\mathbf{m}$, and the noisy sample as $\mathbf{y}=\mathbf{x}+\mathbf{n}$, where 
-$\mathbf{x}$ represents the clean image, $\mathbf{n}$ the observed noise, and $\mathbf{m}$ the simulated noise. The variances and expectations of both observed and simulated noise are presumed to be negligible. Echoing the Noise2Noise framework, the optimization objective of Noisy As Clean can be reformulated as:
-\begin{equation}
-\begin{aligned}
-    &\quad\ \ \mathcal{L}_{Noisy As Clean}(\theta)\\
-    &=\mathbb{E}_{n, m}\{\Vert\mathbf{f_{\theta}(\mathbf{z})}-\mathbf{y}\Vert^{2}_{2}\}=\mathbb{E}_{n, m}\{\Vert\mathbf{f_{\theta}(\mathbf{z})}-\mathbf{x}-\mathbf{n}\Vert^{2}_{2}\}\\
-    &=\mathbb{E}_{n, m}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}\Vert^{2}_{2}\}-2\Tr\{\mathbb{E}_{n, m}\{(\mathbf{n})^\text{T}\mathbf{f_{\theta}(\mathbf{z})}\}\}+C.
-\end{aligned}
-\end{equation}
-
-Here, $C$ is a constant term not dependent on $\theta$. The variables retain their meanings as defined in the previous section. Subsequently, we demonstrate that, under NAC's assumptions, the trace term is reduced to zero, illustrating how the optimization objective aligns with the supervised paradigm.
-\begin{equation}
-\begin{aligned}
-    &\quad \ \mathbb{E}_{n, m}\{(\mathbf{n})^\text{T}\mathbf{f_{\theta}(\mathbf{z})}\}\\
-    &=Cov_{n, m}((\mathbf{n})^\text{T},\ \mathbf{f_{\theta}(\mathbf{z})})+\mathbb{E}_{n, m}\{(\mathbf{n})^\text{T}\}\mathbb{E}_{n, m}\{\mathbf{f_{\theta}(\mathbf{z})}\}\\
-    &\approx Cov_{n, m}((\mathbf{n})^\text{T},\ \mathbf{f_{\theta}(\mathbf{z})})=Cov_{n, m}(\boldsymbol{\sigma}\mathbf{n}, \mathbf{M}\mathbf{z}+\mathbf{N})\\
-    &=Cov_{n, m}(\boldsymbol{\sigma}\mathbf{n}, \mathbf{M}\mathbf{n}+\mathbf{M}\mathbf{m})\\
-    &=\boldsymbol{\sigma}Var\left(\mathbf{n}\right)\mathbf{M}^\text{T}+\boldsymbol{\sigma}Cov\left(\mathbf{n},\mathbf{m}\right)\mathbf{M}^\text{T}\\
-    &\approx\boldsymbol{\sigma}\left(\rho_{n,m}\sqrt{Var(\textbf{n})}\sqrt{Var(\textbf{m})}\right)\mathbf{M}^\text{T}\\
-    &\approx\textbf{0}.
-\end{aligned}    
-\end{equation}
-
-\begin{figure*}
-  \centering
-  \includegraphics[width=\textwidth]{Figure_3.pdf}
-  \caption{The main pipeline of our proposed method. The two-stage model begins with a pretraining phase where the network is initially trained using an MSE loss, leading to a biased denoiser. To improve performance, the subsequent fine-tuning stage employs the trace-constrained loss that supplements the model's training beyond the MSE baseline. This two-step training process aims to narrow the gap between self-supervised and supervised learning techniques, thus enhancing the overall effectiveness of the model.}
-  \label{Figure 3}
-\end{figure*}
-
-Given this result, during the optimization process, the parameters' update direction, when applying the loss function derivative with respect to $\theta$, consistently coincides with that of a supervised learning setting. \\
-
-\noindent
-\textbf{Revisit Recorrupted2Recorrupted:} Rec2Rec \cite{9577798} generates pairs of data, $\mathbf{\widehat{y}}$ and $\mathbf{\widetilde{y}}$, both with independent noise from an initial noisy image $\mathbf{y}$. A neural network is then trained to map $\mathbf{\widehat{y}}$ to $\mathbf{\widetilde{y}}$. More formally:
-\begin{equation}
-    \mathbf{y}=\mathbf{x}+\mathbf{n},\quad \mathbf{n}\sim\mathcal{N}\left(\textbf{0}, \sigma^{2}\textbf{\textit{I}}\right),
-\end{equation}
-\begin{equation}
-\mathbf{\widehat{y}}=\mathbf{y}+\mathbf{D}^\text{T}\mathbf{m},\quad\mathbf{\widetilde{y}}=\mathbf{y}-\mathbf{D}^{-1}\mathbf{m},\quad\mathbf{m}\sim\mathcal{N}\left(\textbf{0}, \sigma^{2}\textbf{\textit{I}}\right).
-\end{equation}
-
-We can establish that the trace term in the loss function of Recorrupted2Recorrupted is given by:
-\begin{equation}
-\begin{aligned}
-    \Tr\{\mathbb{E}_{n, m}\{(\mathbf{f_{\theta}(\mathbf{\widehat{y}})})^\text{T}(\mathbf{n}-\mathbf{D}^{-1}\mathbf{m})\}\}.
-\end{aligned}
-\end{equation}
-
-For simplicity, one may denote $\mathbf{\widehat{n}}=\mathbf{n}+\mathbf{D}^\text{T}\mathbf{m}$, $\mathbf{\widetilde{n}}=\mathbf{n}-\mathbf{D}^\text{T}\mathbf{m}$. The trace term can thus be rewritten as:
-\begin{equation}
-\begin{aligned}
-    \Tr\{\mathbb{E}_{n, m}\{(\mathbf{f_{\theta}(\mathbf{x}+\mathbf{\widehat{n}})})^\text{T}\mathbf{\widetilde{n}}\}\}.
-\end{aligned}
-\end{equation}
-
-Under the construction, $\mathbf{\widehat{n}}$ and $\mathbf{\widetilde{n}}$ are mutually independent, adhering to the condition discussed in the preceding Noise2Noise section. Similarly, it can be demonstrated that the trace term vanishes.
-
-
-## Results
+## 3. Results
 
 ![image](https://github.com/tljxyys/LoTA-N2N/blob/main/fig/Result1.png)
 
 ![image](https://github.com/tljxyys/LoTA-N2N/blob/main/fig/Result2.png)
+
+## 4. Conclusion
+
+In this paper, we propose a novel trace-constraint loss function that bridges the gap between self-supervised and supervised learning in the field of image denoising. By effectively optimizing the self-supervised denoising objective through the incorporation of a trace term as a constraint, our approach allows for improved performance and generalization across various types of images including natural, medical, and biological imagery. We enhance the designed trace-constraint loss function by incorporating the concepts of mutual study and residual study to achieve improved denoising performance and generalization. Furthermore, our designed model has been kept lightweight, enabling better denoising results to be achieved in a shorter training time, without the need for any prior assumptions about the noise. Our method outperforms existing self-supervised denoising models by a significant margin, demonstrating its potential for widespread adoption and practicality in real-world scenarios. Overall, our approach represents a valuable contribution to the advancement of self-supervised denoising methods and holds promise for addressing practical challenges associated with acquiring paired clean / noisy images for supervised learning.
 
 ## Bibtex
 ```
