@@ -35,10 +35,10 @@ $$ \Vert\mathbf{A}\pm\mathbf{B}\Vert{^2_2} = \Vert\mathbf{A}\Vert{^2_2} + \Vert\
 Using Lemma 2, we can restructure the loss of self-supervised approach as the loss in supervised learning plus or minus a trace term and a constant. The disparity between the results of self-supervised and supervised learning arises primarily from the behavior of this trace term. A logical approach might involve setting this trace term to zero, thereby bridging the gap between the performance of self-supervised and supervised learning, leading to considerable improvements in performance. In light of this, we review several prominent self-supervised denoising models.
 
 **Revisit Noise2Noise:** Noise2Noise was a pioneering approach among self-supervised denoising methods. Instead of using noisy/clean image pairs, Noise2Noise leveraged noisy/noisy image pairs with mutually independent noise. Specifically, the pairs of noisy images in Noise2Noise can be described as follows:
-$$y=x+n,\quad n \sim \mathcal{N}\left(\textbf{0},\quad \sigma{^2_1}\textbf{\textit{I}}\right),\quad y'=x+n',\quad n \sim \mathcal{N}\left(\textbf{0}, \sigma{^2_2}\textbf{\textit{I}}\right)$$
+$$y=x+n,\quad n \sim \mathcal{N}\left(\textbf{0}, \sigma{^2_1}\textbf{\textit{I}}\right),\quad y'=x+n',\quad n \sim \mathcal{N}\left(\textbf{0}, \sigma{^2_2}\textbf{\textit{I}}\right) \tag{4}$$
 
 where $y$ and $y'$ constitute two independent noisy representations of a clean image $x$. Utilizing Lemma 2, the optimization objective of Noise2Noise can be reformulated:
-\begin{equation}
+$$
 \begin{aligned}
     &\quad\ \ \mathcal{L}_{Noise2Noise}(\theta)\\
     &=\mathbb{E}_{n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{y'}\Vert^{2}_{2}\}=\mathbb{E}_{n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}-\mathbf{n'}\Vert^{2}_{2}\}\\
@@ -47,7 +47,7 @@ where $y$ and $y'$ constitute two independent noisy representations of a clean i
     &=\mathbb{E}_{n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}\Vert^{2}_{2}\}-2\mathbb{E}_{n, n'}\{\Tr\{(\mathbf{n'})^\text{T}\mathbf{f_{\theta}(\mathbf{y})}\}\}+C\\
     &=\mathbb{E}_{n, n'}\{\Vert\mathbf{f_{\theta}(\mathbf{y})}-\mathbf{x}\Vert^{2}_{2}\}-2\Tr\{\mathbb{E}_{n, n'}\{(\mathbf{n'})^\text{T}\mathbf{f_{\theta}(\mathbf{y})}\}\}+C.
 \end{aligned}
-\end{equation}
+$$
 Here, $C$ equals $\mathbb{E}_{n, n'}\{\Vert\mathbf{x}-\mathbf{y'}\Vert^{2}_{2}-2\Tr(\mathbf{x}^\text{T}(\mathbf{n'}))\}$,  which is a constant independent of $\theta$. The notation $f_{\theta}(\cdot)$ represents the denoising network characterized by learnable parameters $\theta$.
 
 Given the statistical independence and zero-mean nature of $n$ and $n'$, we can assert:
