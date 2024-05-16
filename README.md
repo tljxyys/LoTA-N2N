@@ -9,16 +9,16 @@
 ![image](https://github.com/tljxyys/LoTA-N2N/blob/main/fig/Architecture.png)
 ***
 
-## Background
+## 1. Background
 Denoising refers to the process of removing noise from data, typically within the context of image processing. Noise in an image can stem from various sources, such as suboptimal lighting conditions, sensor imperfections, or transmission inconsistencies. Within the realm of deep learning, denoising involves training neural networks to discern the inherent structure of the noisy data, enabling them to predict a clean, noise-free version of the input. Mathematically, denoising aims to approximate a function $f_{\theta}(\cdot)$, parameterized by $\theta$, which maps a noisy input $y$ to a corresonding clean output $x$: 
 
 $$fθ(y) ≈ x \tag{1}$$
 
 Denoising methodologies can be classified into two categories based on the nature of training data: supervised and self-supervised (unsupervised). Supervised denoising requires pairs of clean and noisy data for training. The denoising function uses noisy inputs to produce denoised outputs, which are then compared to the clean data to minimize discrepancies. Such methods benefit from the direct learning signals provided by paired data, promoting a more precise understanding of the noise-to-signal mapping. In contrast, self-supervised denoising does not require labeled datasets. Instead, it aims to infer a clean data representation directly from the noisy inputs by optimizing an objective function. This function compels the network to learn the inherent structure of the data and filter out the noise. Self-supervised methods are based on the assumption that clean data reside within a lower-dimensional manifold of the noisy input space, which can be leveraged to dissociate the signal from the noise. While these pioneering techniques have advanced self-supervised denoising, they frequently rest upon assumptions about the noise characteristics that may not be valid in complex real-world contexts. This limitation often leads to suboptimal performance when these methods are applied to data with unanticipated noise distributions. Therefore, there is a clear need for denoising approaches that do not rely on any predefined assumptions about noise. 
 
-## Main Idea
+## 2. Main Idea
 
-# Revisit of other methods
+## 2.1. Revisit of other methods
 
 The effectiveness of our proposed LoTA-N2N model can be theoretically supported. The discrepancy between self-supervised learning and supervised learning is attributable to their distinct optimization objectives. In our proposed method, we suggest that the loss function in self-supervised learning can be decomposed into the supervised learning loss component and an additional term. By minimizing this additional term towards zero, we can potentially align the convergence of self-supervised learning with that of supervised learning, thus achieving significant performance gains in self-supervised denoising models. To demonstrate this decomposition, we introduce the following lemmas.
 
@@ -30,7 +30,7 @@ where $\Vert \cdot \Vert^{2}_{2}$ denotes the Frobenius norm (element-wise 2-nor
 
 **Lemma 2.** For any two matrices $\mathbf{A}$, $\mathbf{B}\in\mathbb{R}^{n \times n}$, we have:
 
-$$ \Vert\mathbf{A}\pm\mathbf{B}\Vert^{2}_{2}=\Vert\mathbf{A}\Vert^{2}_{2}+\Vert\mathbf{B}\Vert^{2}_{2}\pm 2\Tr (\mathbf{A}^\text{T}\mathbf{B}) $$
+$$ \Vert\mathbf{A}\pm\mathbf{B}\Vert^{2}_{2} = \Vert\mathbf{A}\Vert^{2}_{2} + \Vert\mathbf{B}\Vert^{2}_{2}\pm 2Tr (\mathbf{A}^\text{T}\mathbf{B}) $$
 
 
 \noindent$\textbf{Proof.}$ Without loss of generality, we only  show the proof for the case of subtraction as follows:
