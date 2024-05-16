@@ -10,7 +10,7 @@
 ***
 
 ## 1. Background
-Denoising refers to the process of removing noise from data, typically within the context of image processing. Noise in an image can stem from various sources, such as suboptimal lighting conditions, sensor imperfections, or transmission inconsistencies. Within the realm of deep learning, denoising involves training neural networks to discern the inherent structure of the noisy data, enabling them to predict a clean, noise-free version of the input. Mathematically, denoising aims to approximate a function $f_{\theta}(\cdot)$, parameterized by $\theta$, which maps a noisy input $y$ to a corresonding clean output $x$: 
+Denoising refers to the process of removing noise from data, typically within the context of image processing. Noise in an image can stem from various sources, such as suboptimal lighting conditions, sensor imperfections, or transmission inconsistencies. Within the realm of deep learning, denoising involves training neural networks to discern the inherent structure of the noisy data, enabling them to predict a clean, noise-free version of the input. Mathematically, denoising aims to approximate a function $f{_\theta}(\cdot)$, parameterized by $\theta$, which maps a noisy input $y$ to a corresonding clean output $x$: 
 
 $$fθ(y) ≈ x \tag{1}$$
 
